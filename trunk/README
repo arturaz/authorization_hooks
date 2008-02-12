@@ -1,0 +1,26 @@
+== Authorization hooks
+
+Few hooks for dealing with authorization.
+
+C stands for controller, H for helper.
+
+=== Added methods
+
+* C: reset_user_session - reset session (does this if session has been 
+tampered with).
+* C: save_last_location - save last location user was (unless it's defined 
+not to be saved, look @ Configuration).
+* C: renew_session - update session cookie expiration date to be 
+session[:expires_in] from now.
+* C: check_authorization - checks if authorized, saves location if not and 
+redirects to login page.
+* C, H: authorized? - true/false. Is user authorized? User is authorized if 
+session[:authorized] evaluates to true.
+
+=== Configuration
+
+Set variables in your environment.rb like this:
+
+AuthorizationHoos.reset_user_session_message = 'foobar!'
+
+Look into lib/authorization_hooks.rb for options.
