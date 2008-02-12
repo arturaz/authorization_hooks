@@ -29,6 +29,14 @@ module Arturaz
         end
       end
 
+      # Return last location where user was so we can do it like this:
+      # <code>
+      # redirect_to last_location
+      # </code>
+      def last_location
+        session[:last_location] || root_url
+      end
+
       # Save last location where user was to session
       def save_last_location
         catch :do_not_save do
@@ -38,7 +46,7 @@ module Arturaz
             throw :do_not_save if request.env["REQUEST_URI"].include?(url)
           end
 
-          session[:request_uri] = request.env["REQUEST_URI"]
+          session[:last_location] = request.env["REQUEST_URI"]
         end
 
         true

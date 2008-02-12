@@ -10,6 +10,7 @@ C stands for controller, H for helper.
 tampered with).
 * C: save_last_location - save last location user was (unless it's defined 
 not to be saved, look @ Configuration).
+* C: last_location - return last saved location.
 * C: renew_session - update session cookie expiration date to be 
 session[:expires_in] from now.
 * C: check_authorization - checks if authorized, saves location if not and 
