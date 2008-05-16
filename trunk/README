@@ -9,7 +9,7 @@ C stands for controller, H for helper.
 * C: reset_user_session - reset session (does this if session has been 
 tampered with).
 * C: save_last_location - save last location user was (unless it's defined 
-not to be saved, look @ Configuration).
+not to be saved with skip_after_filter :save_last_location).
 * C: last_location - return last saved location.
 * C: renew_session - update session cookie expiration date to be 
 session[:expires_in] from now.
@@ -25,3 +25,40 @@ Set variables in your environment.rb like this:
 AuthorizationHoos.reset_user_session_message = 'foobar!'
 
 Look into lib/authorization_hooks.rb for options.
+
+=== Post saving
+
+Don't you hate when you post your long rant to site and the session expires
+and requires you to relogin but then your comment is gone? Well - NO MORE!
+
+This quite simple mechanism will stop your users from having such situations.
+Just create a route named post_after_authorization and point it to a simple 
+controller like this:
+
+  class PostAfterAuthorizationController < ApplicationController
+    skip_after_filter :save_last_location
+
+    def redirect
+      render :layout => false
+    end
+  end
+
+Then create a view for it:
+
+  <!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <%= redirection_form %>
+  </body>
+  </html>
+
+redirection_form helper will create a form with hidden inputs that will 
+(automatically - if JS on) submit them to previous location.
+
+The request will come as if user had done it before logging in and everyone will
+be happy. Yay!
