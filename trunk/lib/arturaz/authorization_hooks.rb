@@ -17,6 +17,7 @@ module Arturaz
       def check_authorization
         unless authorized?
           save_last_location
+          flash[:notice] ||= AuthorizationHooks.flash_notice
           begin
             redirect_to login_url
           rescue ::ActionController::DoubleRenderError
@@ -39,16 +40,7 @@ module Arturaz
 
       # Save last location where user was to session
       def save_last_location
-        catch :do_not_save do
-          # Don't save these urls
-          ::AuthorizationHooks.do_not_save_location_in.each do |page|
-            url = send "#{page}_url", :only_path => true
-            throw :do_not_save if request.env["REQUEST_URI"].include?(url)
-          end
-
-          session[:last_location] = request.env["REQUEST_URI"]
-        end
-
+        session[:last_location] = request.env["REQUEST_URI"]
         true
       end
 
