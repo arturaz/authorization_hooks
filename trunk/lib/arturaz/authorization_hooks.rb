@@ -17,7 +17,7 @@ module Arturaz
       def check_authorization
         unless authorized?
           save_last_location
-          flash[:notice] ||= AuthorizationHooks.flash_notice
+          flash[:notice] ||= ::AuthorizationHooks.flash_notice
           begin
             redirect_to login_url
           rescue ::ActionController::DoubleRenderError
