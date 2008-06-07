@@ -1,1 +1,0 @@
-require 'arturaz/authorization_hooks.rb'
